@@ -7,7 +7,8 @@ import {
   ArrowUpRight,
   ArrowDownLeft,
   ArrowLeftRight,
-  CreditCard,
+  PiggyBank,
+  Bot,
   RefreshCw,
 } from 'lucide-react-native';
 import { Screen, Text, LoadingState, ErrorState, AssetIcon } from '@/components';
@@ -22,8 +23,8 @@ import { usePendingRefresh, POLL_DELAYS_MS } from '@/state/pendingRefresh';
 /**
  * Home (Wallet) — matches the prototype's `home` screen exactly: account
  * selector + scan button header, total balance, a 4-button action row
- * (Send/Receive real; Swap/Buy are "coming soon" placeholders, same as the
- * prototype), a Tokens list, and a bottom Wallet/Activity tab bar.
+ * (Send/Receive/Swap/Earn/Pay, all live — Swap, Earn and Pay are the three
+ * features the lesson adds), a Tokens list, and a bottom Wallet/Activity tab bar.
  *
  * Balances come from useWdkBalances(), which already generically iterates
  * whatever's in the asset registry (src/wdk/assets.ts) — this screen needed
@@ -143,11 +144,12 @@ export default function WalletHome() {
         </View>
 
         {/* Action row: Send / Receive / Swap / Buy */}
-        <View style={{ flexDirection: 'row', gap: 10, marginVertical: moderateScale(8) }}>
+        <View style={{ flexDirection: 'row', gap: 6, marginVertical: moderateScale(8) }}>
           <ActionButton icon={<ArrowUpRight size={moderateScale(20)} color={theme.colors.textPrimary} />} label="Send" onPress={() => router.push('/send')} />
           <ActionButton icon={<ArrowDownLeft size={moderateScale(20)} color={theme.colors.textPrimary} />} label="Receive" onPress={() => router.push('/receive')} />
-          <ActionButton icon={<ArrowLeftRight size={moderateScale(20)} color={theme.colors.textSecondary} />} label="Swap" onPress={() => comingSoon('Swap')} disabled />
-          <ActionButton icon={<CreditCard size={moderateScale(20)} color={theme.colors.textSecondary} />} label="Buy" onPress={() => comingSoon('Buy')} disabled />
+          <ActionButton icon={<ArrowLeftRight size={moderateScale(20)} color={theme.colors.textPrimary} />} label="Swap" onPress={() => router.push('/swap')} />
+          <ActionButton icon={<PiggyBank size={moderateScale(20)} color={theme.colors.textPrimary} />} label="Earn" onPress={() => router.push('/earn')} />
+          <ActionButton icon={<Bot size={moderateScale(20)} color={theme.colors.textPrimary} />} label="Pay" onPress={() => router.push('/pay')} />
         </View>
 
         {/* Tokens */}
