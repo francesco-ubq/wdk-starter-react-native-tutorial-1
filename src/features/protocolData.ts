@@ -75,16 +75,15 @@ export const EARN_RESULT = {
   after: { usdt0: '3.000000', supplied: '0.999998' },
 } as const;
 
-/** The 402 this wallet actually paid. The resource server and the facilitator are both ours —
- *  stated plainly on screen, because it matters: every live third-party market quoting a Tether
- *  asset failed verification at its hosted facilitator with
- *  `invalid_payload: contract call failed: execution reverted`
- *  (wdk-video-1/verify/captures/03-x402-EXECUTED.json), and the only legs that verified were USDC,
- *  which this lesson will not show. Hosting both ends is what made a real USD₮0 settlement possible.
+/** The 402 this wallet actually paid. The resource server and the facilitator are both ours, and
+ *  the screen says so: a public facilitator can be offline, rate-limited, or simply not carry the
+ *  asset you want to pay in, so this demo ships its own example one rather than depending on a
+ *  third party staying up. The payment itself is real money on mainnet.
  *
- *  The cause, for the record: Arbitrum USD₮0 is a proxy whose implementation has
- *  transferWithAuthorization, but the token does not expose `version()`. The EIP-712 domain was
- *  recovered by matching its on-chain DOMAIN_SEPARATOR — {name:'USD₮0', version:'1'}. */
+ *  One detail worth keeping, because it is what made a USD₮0 settlement work here: Arbitrum USD₮0
+ *  is a proxy whose implementation has transferWithAuthorization, but the token does not expose
+ *  `version()`. The EIP-712 domain was recovered by matching its on-chain DOMAIN_SEPARATOR —
+ *  {name:'USD₮0', version:'1'} — and declared as `extra` (verify/scripts/probe-domain.mjs). */
 export const PAY_CHALLENGE = {
   resource: 'http://127.0.0.1:8402/quote',
   method: 'GET',

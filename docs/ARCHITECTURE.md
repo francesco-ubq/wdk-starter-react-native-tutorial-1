@@ -5,7 +5,22 @@ This document explains how the app is put together and, more importantly,
 problems this project hit during development. If you're going to deviate
 from a pattern described here, read the reasoning first.
 
-## The big picture (as it actually is today)
+## Current execution modes
+
+The native core-wallet flow below is one of three paths in this repository:
+
+| Path | Data and execution |
+|---|---|
+| Native core wallet: onboarding, balances, send, receive, activity | WDK hooks and the Bare worklet; external indexer/pricing clients |
+| Browser core wallet | Metro replaces the WDK core, indexer, and selected native modules with `src/web-stubs/`; pricing remains live |
+| Swap, Earn, Pay on every platform | Captured constants from `src/features/protocolData.ts` and local timers; no protocol execution |
+
+The web resolver guard does not guard the three demo routes. Their success
+states are scripted on iOS and Android too. See
+[WEB-HARNESS.md](WEB-HARNESS.md) for the exact replacements, storage limits,
+and incomplete button behavior.
+
+## Native core-wallet data flow
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -28,6 +43,31 @@ from a pattern described here, read the reasoning first.
 │   @tetherto/wdk-react-native-core + @tetherto/wdk                     │
 └───────────────────────────────────────────────────────────────────────┘
 ```
+
+## Startup and configuration map
+
+`package.json` selects `expo-router/entry`. The root route layout mounts
+`WdkAppProvider`, the session/background-lock and account-discovery hooks,
+gesture/safe-area providers, `ThemeProvider`, `CloudBackupProvider`, the
+router stack, and a shared toast. `src/app/index.tsx` chooses onboarding,
+unlock, or Wallet from `useWdkSession()`.
+
+`WdkSessionGate` redirects on an unlocked-to-locked transition; it is not a
+general per-route authorization wrapper. Screens that execute operations
+must still respect the wallet/session state.
+
+| File | Responsibility |
+|---|---|
+| `app.json` / `app.config.js` | Static Expo settings and environment-driven native identity/config |
+| `wdk.config.js` | Packages and network keys compiled into the Bare worklet |
+| `src/wdk/networks.ts` | Runtime connections, assets, labels, explorers, and indexer chain mapping |
+| `metro.config.js` | Browser module replacements; native resolution falls through |
+| `babel.config.js` / `tsconfig.json` | Compilation and the `@/` → `src/` alias |
+
+The worklet config includes Spark, while the runtime network registry
+currently exposes Bitcoin, Ethereum, Arbitrum, and Polygon only. Installed
+or bundled packages do not automatically add a visible network. Package
+roles are documented in [PACKAGES.md](PACKAGES.md).
 
 ## A real correction: the "data seam" described in an earlier version of
 ## this doc is no longer how the app works — this isn't a stale detail,

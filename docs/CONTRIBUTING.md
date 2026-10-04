@@ -17,8 +17,12 @@ upstream merge.
 
 ```bash
 npm run typecheck
-npm run lint
 ```
+
+There is no configured automated test suite. `npm run lint` currently
+invokes Expo's interactive setup: ESLint and its config are not committed.
+Do not run that setup as part of a read-only review. CI runs type checking
+and workflow linting; see `.github/workflows/ci.yaml`.
 
 If your change touches native config (`app.json` plugins, new native
 dependencies), note in your PR description that a `prebuild --clean` is
@@ -32,9 +36,9 @@ exist specifically to avoid re-introducing bugs that were already found and
 fixed — deviating from them without understanding why is how those bugs
 come back.
 
-- **Never import WDK directly in a screen for data reads.** Go through
-  `@/data`'s hooks. If the data seam doesn't cover what you need yet,
-  extend it — don't bypass it.
+- **Use `@/wdk/hooks/useWalletData` and related WDK helpers for wallet data.**
+  Current screens use these directly. The older `@/data` repository layer
+  is unused; its `USE_WDK` flag does not switch the current app's data source.
 - **All text renders through `<Text>`, never raw React Native `<Text>`.**
   This is what applies responsive font scaling automatically. Same for
   `<Button>`, `<TextField>`, `<ScreenHeader>` — use the shared components,

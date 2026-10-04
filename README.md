@@ -11,6 +11,16 @@ the way, is documented rather than hidden.
 
 See the [React Native starter documentation](https://docs.wdk.tether.io/examples-and-starters/react-native-starter/) for an overview.
 
+The local [documentation index](docs/README.md) covers architecture,
+structure, packages, and the browser harness. AI coding agents should start
+with [AGENTS.md](AGENTS.md).
+
+**Current demo boundary:** `npm run web` uses fabricated wallet data and
+browser-only stubs. Swap, Earn, and Pay use captured data and scripted
+progress on **all platforms**, including native; they do not execute
+financial operations. See [WEB-HARNESS.md](docs/WEB-HARNESS.md) for setup
+and limitations. The core-wallet description below refers to native builds.
+
 If you're new here, **read the docs in this order**:
 
 1. [`docs/ENVIRONMENT.md`](docs/ENVIRONMENT.md) — toolchain versions that
@@ -230,5 +240,5 @@ Apache-2.0 — see [`LICENSE`](LICENSE).
 
 ## Contributing
 
-See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the branch strategy and coding
+See [`CONTRIBUTING.md`](docs/CONTRIBUTING.md) for the branch strategy and coding
 conventions used in this repo.

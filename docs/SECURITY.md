@@ -1,5 +1,11 @@
 # Security Architecture
 
+This document describes **native** security behavior. The browser harness
+replaces WDK and SecureStore: its password-vault key and encrypted payload
+are stored together in `localStorage`, and its wallet credentials are demo
+fixtures. Use disposable demo data only. See
+[WEB-HARNESS.md](WEB-HARNESS.md) for the full boundary.
+
 This covers the app password, lock/unlock, and what protects what. Read
 this before changing anything in `src/wdk/passwordVault.ts`,
 `src/wdk/hooks/AutoLockOnBackground.tsx`, or `src/wdk/hooks/WdkSessionGate.tsx`
